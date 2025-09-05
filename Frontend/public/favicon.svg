@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Fondo transparente en lugar de cuadrícula -->
+  <rect width="38" height="38" fill="transparent"/>
+
+  <!-- Capa 1: Cuadrado base rotado 45° -->
+  <rect x="0" y="0" width="24" height="24" rx="3"
+        transform="translate(16 -1) rotate(45)" fill="#115E59"/>
+
+  <!-- Capa 2: Segundo cuadrado rotado 12° -->
+  <rect x="6" y="6" width="19" height="19" rx="2.5"
+        transform="translate(4 -2.5) rotate(12)" fill="#14B8A6"/>
+
+  <!-- Capa 3: Tercer cuadrado rotado -12° -->
+  <rect x="8" y="8" width="14" height="14" rx="2"
+        transform="translate(-2.5 4) rotate(-12)" fill="#2DD4BF"/>
+
+  <!-- Capa 4: Cuarto cuadrado sin rotación -->
+  <rect x="11" y="10.5" width="9" height="10" rx="2" fill="#1E293B"/>
+
+  <!-- Capa 5: Quinto cuadrado rotado -90° -->
+  <rect x="12.5" y="12.5" width="6" height="6" rx="5"
+        transform="" fill="#0D9488"/>
+</svg>
