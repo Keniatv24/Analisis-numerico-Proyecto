@@ -109,7 +109,7 @@ npm install
 cd backend
 
 # Activar entorno virtual
-# En Windows:
+# En Windows:https://docs.github.com/copilot/concepts/coding-agent/coding-agent
 venv\Scripts\activate
 # En Linux/Mac:
 source venv/bin/activate
@@ -161,9 +161,7 @@ npm run dev
 
 ## Contacto
 
-Para preguntas o sugerencias, contactar a los autores:
-- Juan Diego Robles de la Ossa
-- Luis Moreno Gutiérrez
+
 
 ---
 
