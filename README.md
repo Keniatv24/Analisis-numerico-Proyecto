@@ -1,8 +1,7 @@
 # Proyecto de Métodos Numéricos
 
 ## Autores
-- **Juan Diego Robles de la Ossa**
-- **Luis Moreno Gutiérrez**
+
 
 ## Descripción del Proyecto
 
