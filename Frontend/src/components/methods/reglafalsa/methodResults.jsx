@@ -1,10 +1,10 @@
-import FractalHeader from "../../FractalHeader"
+import fractalHeader from "../../fractalHeader"
 
 const methodResults = ({ results, methodName, functionText }) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
       <div className="bg-gradient-to-r from-teal-600 to-emerald-500 px-6 py-4">
-        <FractalHeader />
+        <fractalHeader />
         <h3 className="text-xl font-bold text-white text-center">Resultados del Método {methodName}</h3>
       </div>
 
