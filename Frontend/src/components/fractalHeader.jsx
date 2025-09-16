@@ -1,4 +1,4 @@
-const FractalHeader = () => {
+const fractalHeader = () => {
     return (
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center">
@@ -17,4 +17,4 @@ const FractalHeader = () => {
     )
   }
 
-  export default FractalHeader
+  export default fractalHeader

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
  * - Contenido a la derecha con portada y tarjetas
  * - Misma navegación (Link to="/metodos/...") que tu versión original
  */
-export default function home() {
+export default function Home() {
   return (
     <div className="min-h-screen bg-[var(--paper)] text-[var(--ink)] font-ui">
       <div className="mx-auto max-w-7xl grid grid-cols-12">
