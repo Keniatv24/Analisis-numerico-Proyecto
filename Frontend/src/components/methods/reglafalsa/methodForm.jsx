@@ -1,7 +1,7 @@
 "use client"
-import FractalHeader from "../../FractalHeader"
 import { useNavigate } from "react-router-dom";
 import { useCallback } from "react";
+import FractalHeader from "../../FractalHeader";
 
 const methodFormTemplate = ({
   functionValue,

@@ -1,4 +1,4 @@
-import FractalHeader from "../../FractalHeader"
+import fractalHeader from "../../fractalHeader"
 import { useNavigate } from "react-router-dom";
 import { useCallback } from "react";
 
@@ -29,7 +29,7 @@ const methodFormTemplate = ({
   return (
     <div className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
       <div className="bg-gradient-to-r from-teal-600 to-emerald-500 px-6 py-4">
-        <FractalHeader />
+        <fractalHeader />
         <h2 className="text-xl font-bold text-white text-center">Método {methodName}</h2>
         <p className="text-teal-100 mt-1 text-sm text-center">Complete los siguientes parámetros</p>
       </div>
