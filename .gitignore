@@ -1,5 +1,6 @@
 #ignore the env
 .env
+.venv
 #ignore the node_modules folder
 node_modules
 #ignore the build folder

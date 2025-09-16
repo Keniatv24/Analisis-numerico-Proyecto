@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom"
 import Home from "./components/home"
-import ReglaFalsa from "./components/methods/reglafalsa/reglaFalsa"
+import ReglaFalsa  from "./components/methods/reglafalsa/ReglaFalsa"
 import Graficador from "./components/methods/graficador"
 import Secante from "./components/methods/secante/secante"
 import RaicesMultiples from "./components/methods/raicesmultiples/raicesmultiples"
@@ -12,6 +12,8 @@ import Jacobi from "./components/methods/cap2/jacobi/jacobi"
 import GaussSeidel from "./components/methods/cap2/gaussseidel/gaussseidel"
 import Sor from "./components/methods/cap2/sor/sor"
 import InformeMatrix from "./components/ComparativeMatrixReportGenerator"
+import Capitulo2 from "./components/chapters/Capitulo2"
+import Capitulo3 from "./components/chapters/Capitulo3"
 
 
 function App() {
@@ -31,7 +33,8 @@ function App() {
         <Route path="/metodos/cap2/sor" element={<Sor />} />
         <Route path="/informe" element={<Informe />} />
         <Route path="/informeMatrix" element={<InformeMatrix />} />
-        {/* Otras rutas */}
+        <Route path="/capitulo-2" element={<Capitulo2 />} />
+        <Route path="/capitulo-3" element={<Capitulo3 />} />
       </Routes>
     </div>
   )
