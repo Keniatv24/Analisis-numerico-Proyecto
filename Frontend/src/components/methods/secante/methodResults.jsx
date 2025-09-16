@@ -1,52 +1,52 @@
-import fractalHeader from "../../fractalHeader"
+import fractalHeader from "../../fractalHeader";
 
 const methodResults = ({ results, methodName, functionText }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-      <div className="bg-gradient-to-r from-teal-600 to-emerald-500 px-6 py-4">
+    <div className="rounded-xxl border border-[var(--line)] bg-[var(--card)] shadow-soft overflow-hidden">
+      {/* Cabecera + banda cobre */}
+      <div className="px-6 py-4">
         <fractalHeader />
-        <h3 className="text-xl font-bold text-white text-center">Resultados del Método {methodName}</h3>
+        <div className="mt-2 h-2 w-full bg-[var(--copper)] rounded-t-xxl" />
+        <h3 className="mt-3 text-xl font-editorial">Resultados del Método {methodName}</h3>
       </div>
 
-      <div className="p-3 ">
-        <div className="py-1 mb-6">
-          <div className="py-1 flex items-center mb-2">
-            <div className="h-4 w-4 rounded-full bg-teal-500 mr-2"></div>
-            <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400">Función:</h4>
+      <div className="px-6 pb-6">
+        {/* Función */}
+        <div className="mb-6">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="h-3 w-3 rounded-full bg-[var(--copper)]" />
+            <h4 className="text-sm text-[var(--ink-soft)]">Función:</h4>
           </div>
-          <div className="py-1 bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
-            <p className="text-lg font-mono text-gray-800 dark:text-gray-200">{functionText}</p>
+          <div className="bg-white rounded-xl p-3 border border-[var(--line)] shadow-soft">
+            <p className="text-lg font-mono">{functionText}</p>
           </div>
         </div>
 
+        {/* Conclusión */}
         {results.conclusion && (
-          <div className="py-1 p-4 bg-teal-50 dark:bg-teal-900/20 rounded-lg mb-6 border-l-4 border-teal-500">
-            <p className="text-teal-800 dark:text-teal-200">{results.conclusion}</p>
+          <div className="p-4 rounded-xl border border-[var(--line)] bg-[color-mix(in_olab,var(--paper)_88%,var(--copper)_12%)]/30 mb-6">
+            <p className="text-[var(--ink)]">{results.conclusion}</p>
           </div>
         )}
 
-        <div className="py-1"></div>
-
-        <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 shadow">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-teal-700 text-white">
+        {/* Tabla */}
+        <div className="overflow-x-auto rounded-xl border border-[var(--line)] shadow-soft">
+          <table className="min-w-full text-sm">
+            <thead className="bg-[var(--copper-700)] text-white">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Iteración</th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">xi</th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">f(xi)</th>
-                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Error</th>
+                <th className="px-4 py-3 text-left uppercase tracking-wide">Iteración</th>
+                <th className="px-4 py-3 text-left uppercase tracking-wide">xi</th>
+                <th className="px-4 py-3 text-left uppercase tracking-wide">f(xi)</th>
+                <th className="px-4 py-3 text-left uppercase tracking-wide">Error</th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody>
               {results.iterations.map((row, index) => (
-                <tr
-                  key={index}
-                  className={index % 2 === 0 ? "bg-white dark:bg-gray-800" : "bg-gray-50 dark:bg-gray-700/50"}
-                >
-                  <td className="px-2 py-3 text-sm font-medium text-gray-900 dark:text-white">{row[0]}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900 dark:text-white font-mono text-center">{row[1]}</td>
-                  <td className="px-4 py-3 text-sm text-teal-600 dark:text-teal-400 font-medium font-mono">{row[2]}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900 dark:text-white font-mono">{row[3]}</td>
+                <tr key={index} className={index % 2 === 0 ? "bg-[var(--card)]" : "bg-white"}>
+                  <td className="px-3 py-3 font-medium">{row[0]}</td>
+                  <td className="px-3 py-3 font-mono text-center">{row[1]}</td>
+                  <td className="px-3 py-3 font-mono text-[var(--copper-900)] font-semibold">{row[2]}</td>
+                  <td className="px-3 py-3 font-mono">{row[3]}</td>
                 </tr>
               ))}
             </tbody>
@@ -55,21 +55,21 @@ const methodResults = ({ results, methodName, functionText }) => {
 
         {/* Resultado final */}
         {results.root && (
-          <div className="mt-6 p-4 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-200 dark:border-teal-800">
-            <div className="flex items-center">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-r from-teal-600 to-emerald-500 flex items-center justify-center text-white font-bold mr-3">
+          <div className="mt-6 p-4 rounded-xl border border-[var(--line)] bg-[var(--card)]">
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-full bg-[var(--copper)] text-white grid place-items-center font-bold">
                 x
               </div>
               <div>
-                <p className="text-sm text-teal-800 dark:text-teal-200">Aproximación de la raíz:</p>
-                <p className="text-lg font-mono font-bold text-teal-800 dark:text-teal-200">{results.root}</p>
+                <p className="text-sm text-[var(--ink-soft)]">Aproximación de la raíz:</p>
+                <p className="text-lg font-mono font-bold">{results.root}</p>
               </div>
             </div>
           </div>
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default methodResults
+export default methodResults;

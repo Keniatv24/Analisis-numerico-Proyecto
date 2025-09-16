@@ -1,10 +1,9 @@
-import { useState } from "react"
-import { ArrowLeft, HelpCircle, Info } from "lucide-react"
-import { Link } from "react-router-dom"
-import MethodFormTemplate from "./methodForm"
-import MethodResults from "../../methods/secante/methodResults"
-import api from "../../../api/config"
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { ArrowLeft, HelpCircle, Info } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import MethodFormTemplate from "./methodForm";
+import MethodResults from "../../methods/secante/methodResults";
+import api from "../../../api/config";
 
 const secante = () => {
   const navigate = useNavigate();
@@ -14,97 +13,89 @@ const secante = () => {
     x1: 2,
     tol: 0.0000001,
     max_count: 100,
-  })
+  });
 
-  const [results, setResults] = useState(null)
-  const [error, setError] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [showInfo, setShowInfo] = useState(false)
+  const [results, setResults] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError(null)
-    setIsLoading(true)
+    e.preventDefault();
+    setError(null);
+    setIsLoading(true);
 
     try {
-      // Validaciones básicas
+      // (Se mantiene tu validación original)
       if (Number.parseFloat(formData.a) >= Number.parseFloat(formData.b)) {
-        throw new Error("El extremo 'a' debe ser menor que 'b'")
+        throw new Error("El extremo 'a' debe ser menor que 'b'");
       }
 
-      // Preparar datos para la API
       const requestData = {
         function_text: formData.function,
         x0: Number.parseFloat(formData.x0),
         x1: Number.parseFloat(formData.x1),
         tol: Number.parseFloat(formData.tol),
         max_count: Number.parseInt(formData.max_count),
-      }
+      };
 
-      api.post('calculations/secante/', requestData)
-        .then(response => {
+      api
+        .post("calculations/secante/", requestData)
+        .then((response) => {
           setResults(response.data);
-          console.log(response.data)
           setIsLoading(false);
         })
-        .catch(err => {
+        .catch((err) => {
           setError(err.message || "Ocurrió un error al calcular");
           setResults(null);
           setIsLoading(false);
         });
-
     } catch (err) {
-      setError(err.message || "Ocurrió un error al calcular")
-      setResults(null)
-      setIsLoading(false)
+      setError(err.message || "Ocurrió un error al calcular");
+      setResults(null);
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
-    <div className="w-screen min-h-screen bg-gradient-to-b from-gray-900 to-gray-950">
-      {/* Header */}
-      <header className="bg-gray-900/80 border-b border-gray-800 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+    <div className="min-h-screen bg-[var(--paper)] text-[var(--ink)] font-ui">
+      {/* Header editorial */}
+      <header className="sticky top-0 z-10 bg-[var(--paper)]/90 backdrop-blur border-b border-[var(--line)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Link to="/" className="px-4 flex items-center text-teal-400 hover:text-teal-300 transition-colors mr-6">
-                <ArrowLeft className="h-5 w-5 mr-2" />
+            <div className="flex items-center gap-4">
+              <Link
+                to="/"
+                className="inline-flex items-center gap-2 text-[var(--copper-800)] hover:text-[var(--copper)] transition"
+              >
+                <ArrowLeft className="h-5 w-5" />
                 <span>Volver</span>
               </Link>
-              <div className="flex items-center">
-              <div className="relative h-10 w-10 mr-3">
-                <div className="absolute inset-0 bg-teal-800 rounded-lg transform rotate-45"></div>
-                <div className="absolute inset-1 bg-teal-500 rounded-md transform rotate-12"></div>
-                <div className="absolute inset-2 bg-teal-400 rounded-sm transform -rotate-12"></div>
-                <div className="absolute inset-3 bg-white dark:bg-gray-800 rounded-sm"></div>
-                <div className="absolute inset-4 bg-teal-600 rounded-sm transform -rotate-90"></div>
-              </div>
-                <span className="text-xl font-bold bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">
-                  FRACTAL
-                </span>
+              <div className="inline-flex items-center gap-2 rounded-2xl border border-[var(--line)] px-3 py-1 bg-[var(--paper)]">
+                <span className="font-editorial tracking-wide text-xl">PulsoMatematico</span>
               </div>
             </div>
-            <div className="text-white font-medium">Método de Secante</div>
-              <div className="flex items-center gap-4">
+
+            <div className="flex items-center gap-4">
+              <span className="text-[17px] font-editorial">Método de Secante</span>
               <button
                 onClick={() => setShowInfo(!showInfo)}
-                className="flex items-center text-teal-400 hover:text-teal-300 transition-colors"
+                className="inline-flex items-center gap-2 text-[var(--copper-800)] hover:text-[var(--copper)] transition"
               >
-                <Info className="h-5 w-5 mr-1" />
+                <Info className="h-5 w-5" />
                 <span>Info</span>
               </button>
-
               <button
-              onClick={() => navigate("/informe")}
-              className="flex items-center text-teal-400 hover:text-teal-300 transition-colors"
+                onClick={() => navigate("/informe")}
+                className="book-link inline-flex items-center rounded-xl border border-[var(--line)] px-3 py-1.5 bg-[var(--card)] hover:shadow-soft transition"
               >
                 Ir al Informe
               </button>
@@ -113,95 +104,89 @@ const secante = () => {
         </div>
       </header>
 
-      {/* Info Panel */}
+      {/* Panel informativo */}
       {showInfo && (
-        <div className="bg-gray-800/80 border-b border-gray-700 py-2">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-              <h3 className="text-xl font-bold text-white mb-4 flex items-center">
-                <HelpCircle className="h-5 w-5 mr-2 text-teal-400" />
+        <div className="border-b border-[var(--line)]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="rounded-xxl border border-[var(--line)] bg-[var(--card)] p-5 shadow-soft">
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <HelpCircle className="h-5 w-5 text-[var(--copper)]" />
                 Método de Secante
               </h3>
-              <p className="text-gray-300 mb-4">
-                El método de Regla Falsa (o Falsa Posición) es una técnica para encontrar raíces de ecuaciones que
-                combina características del método de bisección y el método de la secante.
+              <p className="mt-3 text-[var(--ink-soft)]">
+                Método iterativo que aproxima la raíz usando rectas secantes entre dos aproximaciones sucesivas.
               </p>
-              <div className="space-y-3 text-gray-400">
-                <p>
-                  <span className="font-medium text-teal-400">Funcionamiento:</span> Utiliza interpolación lineal para
-                  estimar la raíz, pero mantiene un intervalo que contiene la raíz en cada iteración.
-                </p>
-                <p>
-                  <span className="font-medium text-teal-400">Ventajas:</span> Converge más rápido que el método de
-                  bisección mientras mantiene su robustez.
-                </p>
-                <p>
-                  <span className="font-medium text-teal-400">Requisitos:</span> La función debe ser continua y cambiar
-                  de signo en el intervalo [a, b].
-                </p>
-              </div>
+              <ul className="mt-3 space-y-1 text-[var(--ink-soft)] text-[15px]">
+                <li>
+                  <span className="font-medium text-[var(--copper-800)]">Funcionamiento:</span> usa dos valores (x0, x1)
+                  y construye la secante para obtener la siguiente aproximación.
+                </li>
+                <li>
+                  <span className="font-medium text-[var(--copper-800)]">Requisitos:</span> la función debe ser evaluable
+                  en el entorno de la raíz (no requiere derivadas).
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       )}
 
+      {/* Contenido */}
       <main className="py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Form Section */}
-            <div>
-              <MethodFormTemplate
-                functionValue={formData.function}
-                x0Value={formData.x0}
-                x1Value={formData.x1}
-                tolValue={formData.tol}
-                maxCountValue={formData.max_count}
-                onFunctionChange={(e) => handleChange({ target: { name: "function", value: e.target.value } })}
-                onAChange={(e) => handleChange({ target: { name: "x0", value: e.target.value } })}
-                onBChange={(e) => handleChange({ target: { name: "x1", value: e.target.value } })}
-                onTolChange={(e) => handleChange({ target: { name: "tol", value: e.target.value } })}
-                onMaxCountChange={(e) => handleChange({ target: { name: "max_count", value: e.target.value } })}
-                onSubmit={handleSubmit}
-                isLoading={isLoading}
-                error={error}
-                methodName="Secante"
-                submitText="Calcular"
-              />
-            </div>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Formulario */}
+          <div>
+            <MethodFormTemplate
+              functionValue={formData.function}
+              x0Value={formData.x0}
+              x1Value={formData.x1}
+              tolValue={formData.tol}
+              maxCountValue={formData.max_count}
+              onFunctionChange={(e) => handleChange({ target: { name: "function", value: e.target.value } })}
+              onAChange={(e) => handleChange({ target: { name: "x0", value: e.target.value } })}
+              onBChange={(e) => handleChange({ target: { name: "x1", value: e.target.value } })}
+              onTolChange={(e) => handleChange({ target: { name: "tol", value: e.target.value } })}
+              onMaxCountChange={(e) => handleChange({ target: { name: "max_count", value: e.target.value } })}
+              onSubmit={handleSubmit}
+              isLoading={isLoading}
+              error={error}
+              methodName="Secante"
+              submitText="Calcular"
+            />
+          </div>
 
-            {/* Results Section */}
-            <div>
-              {results ? (
-                <MethodResults results={results} methodName="Secante" functionText={formData.function} />
-              ) : (
-                <div className="bg-gray-800/50 rounded-xl border border-gray-700 p-8 flex flex-col items-center justify-center h-full">
-                  <div className="h-16 w-16 rounded-full bg-gray-700/50 flex items-center justify-center mb-4">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-8 w-8 text-teal-400"
-                    >
-                      <path d="M3 3v18h18" />
-                      <path d="M3 15l4-4 4 4 4-4 4 4" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold text-white mb-2">Sin resultados aún</h3>
-                  <p className="text-gray-400 text-center">
-                    Complete los parámetros y haga clic en "Calcular" para ver los resultados del método.
-                  </p>
+          {/* Resultados */}
+          <div>
+            {results ? (
+              <MethodResults results={results} methodName="Secante" functionText={formData.function} />
+            ) : (
+              <div className="rounded-xxl border border-[var(--line)] bg-[var(--card)] p-8 flex flex-col items-center justify-center h-full shadow-soft">
+                <div className="h-16 w-16 rounded-full bg-[var(--copper-100)] grid place-items-center mb-4">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-8 w-8 text-[var(--copper-800)]"
+                  >
+                    <path d="M3 3v18h18" />
+                    <path d="M3 15l4-4 4 4 4-4 4 4" />
+                  </svg>
                 </div>
-              )}
-            </div>
+                <h3 className="text-xl font-editorial mb-1">Sin resultados aún</h3>
+                <p className="text-[var(--ink-soft)] text-center">
+                  Completa los parámetros y pulsa <strong>Calcular</strong>.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default secante
+export default secante;
