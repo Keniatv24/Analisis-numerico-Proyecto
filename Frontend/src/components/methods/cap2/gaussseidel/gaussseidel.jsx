@@ -115,40 +115,51 @@ const gaussSeidel = () => {
   };
 
   return (
-    <div className="w-screen min-h-screen bg-gradient-to-b from-gray-900 to-gray-950">
-      <header className="bg-gray-900/80 border-b border-gray-800 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+    <div className="min-h-screen bg-[var(--paper)] text-[var(--ink)] font-ui">
+      {/* Header editorial */}
+      <header className="sticky top-0 z-10 bg-[var(--paper)]/90 backdrop-blur border-b border-[var(--line)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Link to="/" className="px-4 flex items-center text-teal-400 hover:text-teal-300 mr-6">
-                <ArrowLeft className="h-5 w-5 mr-2" />
+            <div className="flex items-center gap-4">
+              <Link to="/" className="inline-flex items-center gap-2 text-[var(--copper-700)] hover:text-[var(--copper)] transition">
+                <ArrowLeft className="h-5 w-5" />
                 <span>Volver</span>
               </Link>
-              <span className="text-xl font-bold bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">FRACTAL</span>
-            </div>
-            <div className="text-white font-medium">Gauss Seidel</div>
-            <button onClick={() => setShowInfo(!showInfo)} className="text-teal-400 hover:text-teal-300 flex items-center">
-              <Info className="h-5 w-5 mr-1" /> <span>Info</span>
-            </button>
 
-            <button
-              onClick={() => navigate("/informeMatrix")}
-              className="flex items-center text-teal-400 hover:text-teal-300 transition-colors"
+              <div className="inline-flex items-center gap-2 rounded-2xl border border-[var(--line)] px-3 py-1 bg-[var(--paper)]">
+                <span className="font-editorial tracking-wide text-xl">PulsoMatematico</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <span className="text-[17px] font-editorial">Gauss Seidel</span>
+              <button
+                onClick={() => setShowInfo(!showInfo)}
+                className="inline-flex items-center gap-2 text-[var(--copper-800)] hover:text-[var(--copper)] transition"
+              >
+                <Info className="h-5 w-5" />
+                <span>Info</span>
+              </button>
+
+              <button
+                onClick={() => navigate("/informeMatrix")}
+                className="book-link inline-flex items-center rounded-xl border border-[var(--line)] px-3 py-1.5 bg-[var(--card)] hover:shadow-soft transition"
               >
                 Ir al Informe
               </button>
+            </div>
           </div>
         </div>
       </header>
 
       {showInfo && (
-        <div className="bg-gray-800/80 border-b border-gray-700 py-2">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-              <h3 className="text-xl font-bold text-white mb-4 flex items-center">
-                <HelpCircle className="h-5 w-5 mr-2 text-teal-400" /> Método de Gauss-Seidel
+        <div className="border-b border-[var(--line)]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="rounded-xxl border border-[var(--line)] bg-[var(--card)] p-5 shadow-soft">
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <HelpCircle className="h-5 w-5 text-[var(--copper)]" /> Método de Gauss-Seidel
               </h3>
-              <p className="text-gray-300">Métodos iterativos para resolver sistemas lineales Ax=b.</p>
+              <p className="mt-3 text-[var(--ink-soft)]">Métodos iterativos para resolver sistemas lineales Ax=b.</p>
             </div>
           </div>
         </div>
@@ -183,8 +194,24 @@ const gaussSeidel = () => {
             {results ? (
               <MethodResults results={results} methodName="Gauss Seidel" />
             ) : (
-              <div className="flex flex-col items-center justify-center h-full text-slate-400">
-                <span className="text-lg">Ingrese los datos y calcule para ver resultados.</span>
+              <div className="rounded-xxl border border-[var(--line)] bg-[var(--card)] p-8 flex flex-col items-center justify-center h-full shadow-soft">
+                <div className="h-16 w-16 rounded-full bg-[var(--copper-100)] grid place-items-center mb-4">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-8 w-8 text-[var(--copper-800)]"
+                  >
+                    <path d="M3 3v18h18" />
+                    <path d="M3 15l4-4 4 4 4-4 4 4" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-editorial mb-1">Sin resultados aún</h3>
+                <p className="text-[var(--ink-soft)] text-center">Ingrese los datos y calcule para ver resultados.</p>
               </div>
             )}
           </div>
