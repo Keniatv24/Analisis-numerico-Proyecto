@@ -94,6 +94,10 @@ export default function Capitulo1() {
                 desc="Iterativo que utiliza la recta secante entre dos puntos para aproximar la raíz." />
               <MethodCard title="Newton" to="/metodos/newton"
                 desc="Usando derivada de la función para aproximar la convergencia." />
+              <MethodCard title="Punto Fijo" to="/metodos/punto-fijo"
+                desc="Reescribe f(x)=0 como x=g(x) y itera x_{n+1}=g(x_n) para converger a la raíz." />
+              <MethodCard title="Raices Múltiples" to="/metodos/raices-multiples"
+                desc="Método especializado para raíces de multiplicidad mayor a 1, empleando derivadas." />
             </div>
           </section>
         </main>

@@ -30,6 +30,7 @@ function App() {
         <Route path="/metodos/regla-falsa" element={<ReglaFalsa />} />
         <Route path="/metodos/secante" element={<Secante />} />
         <Route path="/metodos/punto-fijo" element={<Puntofijo />} />
+  <Route path="/metodos/raices-multiples" element={<RaicesMultiples />} />
         <Route path="/metodos/newton" element={<Newton />} />
         <Route path="/graficador" element={<Graficador />} />
         <Route path="/informe" element={<Informe />} />
