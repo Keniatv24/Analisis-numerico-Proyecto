@@ -11,6 +11,7 @@ export default function FunctionGrapher({
   yMax: yMaxProp = 4,
   points: pointsProp = 100,
   editable = true,
+
 }) {
   const location = useLocation();
   const formulaFromState = location.state?.formula;
@@ -76,6 +77,7 @@ export default function FunctionGrapher({
     }
   };
 
+  
   const handlePlotFunction = () => {
     calculateGraphData();
   };

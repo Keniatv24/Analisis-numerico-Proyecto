@@ -12,6 +12,7 @@ const getGSuggestions = (fStr) => {
     { desc: "g(x) = x + k·f(x)", expr: `(${x}) + k*(${fStr})` },
     { desc: "g(x) = x·f(x)", expr: `(${x})*(${fStr})` },
     { desc: "g(x) = x/f(x)", expr: `(${x})/(${fStr})` },
+    
   ];
 
   let simplificaciones = [];
