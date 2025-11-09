@@ -16,6 +16,7 @@ from .methods.cap2.Doolittle import doolittle
 from .methods.cap2.Cholesky import cholesky
 
 
+
 @api_view(['GET'])
 def test_calculations(request):
     return Response({"message": "Calculations API is ready!"})
@@ -98,6 +99,7 @@ def calculate_multiple_roots(request):
         return Response({"error": str(e)}, status=400)
     except Exception as e:
         return Response({"error": "Error inesperado: " + str(e)}, status=500)
+    
 
 @api_view(['POST'])
 def calculate_biseccion(request):
@@ -124,6 +126,8 @@ def calculate_biseccion(request):
         return Response({"error": str(e)}, status=400)
     except Exception as e:
         return Response({"error": "Error inesperado: " + str(e)}, status=500)
+    
+
 
 
 @api_view(['POST'])
@@ -150,6 +154,8 @@ def calculate_fixed_point(request):
         return Response({"error": str(e)}, status=400)
     except Exception as e:
         return Response({"error": "Error inesperado: " + str(e)}, status=500)
+    
+
 
 @api_view(['POST'])
 def calculate_newton(request):
@@ -175,6 +181,8 @@ def calculate_newton(request):
         return Response({"error": str(e)}, status=400)
     except Exception as e:
         return Response({"error": "Error inesperado: " + str(e)}, status=500)
+
+
 
 @api_view(['POST'])
 def calculate_jacobi(request):
@@ -202,6 +210,8 @@ def calculate_jacobi(request):
     except Exception as e:
         return Response({"error": "Error inesperado: " + str(e)}, status=500)
 
+
+
 @api_view(['POST'])
 def calculate_gaussSeidel(request):
     try:
@@ -227,6 +237,8 @@ def calculate_gaussSeidel(request):
         return Response({"error": str(e)}, status=400)
     except Exception as e:
         return Response({"error": "Error inesperado: " + str(e)}, status=500)
+
+
 
 @api_view(['POST'])
 def calculate_sor(request):
@@ -265,6 +277,8 @@ def _read_A_b(request):
     if A is None:
         return None, None, Response({"error": "Falta 'matrix'."}, status=400)
     return A, b, None
+
+    
 
 
 @api_view(['POST'])
