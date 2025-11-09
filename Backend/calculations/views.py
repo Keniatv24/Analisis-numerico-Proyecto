@@ -9,6 +9,12 @@ from .methods.Newton import newton_method
 from .methods.cap2.Jacobi import jacobi_method
 from .methods.cap2.GaussSeidel import gaussSeidel_method
 from .methods.cap2.Sor import sor_method
+from .methods.cap2.LU_simple import lu_simple
+from .methods.cap2.LU_pivoteo import lu_pivoteo_parcial
+from .methods.cap2.Crout import crout
+from .methods.cap2.Doolittle import doolittle
+from .methods.cap2.Cholesky import cholesky
+
 
 @api_view(['GET'])
 def test_calculations(request):
@@ -251,3 +257,50 @@ def calculate_sor(request):
     except Exception as e:
         print(e)
         return Response({"error": "Error inesperado: " + str(e)}, status=500)
+
+def _read_A_b(request):
+    data = request.data
+    A = data.get('matrix')
+    b = data.get('vector_b', None)
+    if A is None:
+        return None, None, Response({"error": "Falta 'matrix'."}, status=400)
+    return A, b, None
+
+
+@api_view(['POST'])
+def calculate_lu_simple(request):
+    data = request.data
+    A = data.get('matrix')
+    b = data.get('vector_b', None)
+    if A is None:
+        return Response({"error": "Falta 'matrix'."}, status=400)
+    results = lu_simple(A, b)
+    return Response(results, status=200)
+
+@api_view(['POST'])
+def calculate_lu_pivoteo(request):
+    A, b, err = _read_A_b(request)
+    if err: return err
+    results = lu_pivoteo_parcial(A, b)
+    return Response(results, status=200)
+
+@api_view(['POST'])
+def calculate_crout(request):
+    A, b, err = _read_A_b(request)
+    if err: return err
+    results = crout(A, b)
+    return Response(results, status=200)
+
+@api_view(['POST'])
+def calculate_doolittle(request):
+    A, b, err = _read_A_b(request)
+    if err: return err
+    results = doolittle(A, b)
+    return Response(results, status=200)
+
+@api_view(['POST'])
+def calculate_cholesky(request):
+    A, b, err = _read_A_b(request)
+    if err: return err
+    results = cholesky(A, b)
+    return Response(results, status=200)

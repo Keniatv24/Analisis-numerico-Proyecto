@@ -35,6 +35,12 @@ export default function Capitulo1() {
                   Capítulo 3
                 </span>
               </Link>
+              <Link to="/capitulo-4" className="book-link group block rounded-xl px-3 py-2 transition">
+                <span className="inline-flex items-center gap-2">
+                <span className="h-3 w-1.5 bg-[var(--copper)] rounded-full group-hover:h-4 transition-all" />
+                     Capítulo 4
+                 </span>
+                 </Link>
             </nav>
           </div>
         </aside>

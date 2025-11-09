@@ -14,9 +14,16 @@ import GaussSeidel from "./components/methods/cap2/gaussseidel/gaussseidel";
 import Sor from "./components/methods/cap2/sor/sor";
 import InformeMatrix from "./components/ComparativeMatrixReportGenerator";
 import Capitulo1 from "./components/chapters/Capitulo1";
+import LU from "./pages/cap2/LU.jsx";
+import LUPivoteo from "./pages/cap2/LUPivoteo.jsx";
+import Crout from "./pages/cap2/Crout.jsx";
+import Doolittle from "./pages/cap2/Doolittle.jsx";
+import Cholesky from "./pages/cap2/Cholesky.jsx";
 
 import Capitulo2 from "./components/chapters/Capitulo2";
 import Capitulo3 from "./components/chapters/Capitulo3";
+import Capitulo4 from "./components/chapters/Capitulo4";
+
 
 function App() {
   return (
@@ -30,7 +37,7 @@ function App() {
         <Route path="/metodos/regla-falsa" element={<ReglaFalsa />} />
         <Route path="/metodos/secante" element={<Secante />} />
         <Route path="/metodos/punto-fijo" element={<Puntofijo />} />
-  <Route path="/metodos/raices-multiples" element={<RaicesMultiples />} />
+        <Route path="/metodos/raices-multiples" element={<RaicesMultiples />} />
         <Route path="/metodos/newton" element={<Newton />} />
         <Route path="/graficador" element={<Graficador />} />
         <Route path="/informe" element={<Informe />} />
@@ -38,6 +45,14 @@ function App() {
         <Route path="/metodos/cap2/jacobi" element={<Jacobi />} />
         <Route path="/metodos/cap2/gauss-seidel" element={<GaussSeidel />} />
         <Route path="/metodos/cap2/sor" element={<Sor />} />
+        <Route path="/metodos/cap2/lu-simple" element={<LU />} />
+        <Route path="/metodos/cap2/lu-pivoteo" element={<LUPivoteo />} />
+        <Route path="/metodos/cap2/crout" element={<Crout />} />
+        <Route path="/metodos/cap2/doolittle" element={<Doolittle />} />
+        <Route path="/metodos/cap2/cholesky" element={<Cholesky />} />
+        <Route path="/capitulo-4" element={<Capitulo4 />} />
+        
+
       </Routes>
     </div>
   );

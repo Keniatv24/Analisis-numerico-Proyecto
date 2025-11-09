@@ -38,6 +38,10 @@ export default function Home() {
               Capítulo 3 – Interpolación
             </button>
           </Link>
+          <Link to="/capitulo-4" className="btn-copper">
+            Capítulo 4 — Factorizaciones y Álgebra Matricial
+          </Link>
+
         </div>
 
         {/* Footer */}
