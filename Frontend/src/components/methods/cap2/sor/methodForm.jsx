@@ -1,6 +1,7 @@
 import fractalHeader from "../../../fractalHeader";
 import { Calculator } from "lucide-react";
 
+
 const methodForm = ({
   n,
   matrixA,

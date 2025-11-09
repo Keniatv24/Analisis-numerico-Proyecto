@@ -101,6 +101,7 @@ const methodResults = ({ results, methodName = "SOR" }) => {
             </table>
           </div>
         )}
+        
 
         {/* Solución final */}
         {solution && (
