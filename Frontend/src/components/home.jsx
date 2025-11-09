@@ -13,11 +13,13 @@ export default function Home() {
           </span>
         </div>
 
+
         {/* Subtítulo */}
         <p className="mt-6 text-lg md:text-xl text-[color-mix(in_olab,var(--ink)_85%,var(--paper)_15%)]">
           Bienvenido a la plataforma de <strong>métodos numéricos</strong>.<br />
           Selecciona un capítulo para comenzar.
         </p>
+        
 
         {/* Botones / CTAs */}
         <div className="mt-10 space-y-4">
