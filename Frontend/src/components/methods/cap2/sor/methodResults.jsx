@@ -119,6 +119,8 @@ const methodResults = ({ results, methodName = "SOR" }) => {
           </div>
         )}
 
+
+
         {/* Vacío */}
         {!solution && iterations.length === 0 && (
           <div className="mt-4 text-center text-sm text-[var(--ink-soft)]">
@@ -129,5 +131,7 @@ const methodResults = ({ results, methodName = "SOR" }) => {
     </div>
   );
 };
+
+
 
 export default methodResults;
