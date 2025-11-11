@@ -14,6 +14,10 @@ from .methods.cap2.LU_pivoteo import lu_pivoteo_parcial
 from .methods.cap2.Crout import crout
 from .methods.cap2.Doolittle import doolittle
 from .methods.cap2.Cholesky import cholesky
+from .methods.cap3.Vandermonde import vandermonde_interpolation
+from .methods.cap3.NewtonInterpolante import newton_interpolation
+from .methods.cap3.Lagrange import lagrange_interpolation
+from .methods.cap3.Splines import spline_interpolation
 
 
 
@@ -318,3 +322,100 @@ def calculate_cholesky(request):
     if err: return err
     results = cholesky(A, b)
     return Response(results, status=200)
+
+
+# ------------------------- Capítulo 3: Interpolación -------------------------
+def _read_points(request):
+    data = request.data
+    points = data.get('points')
+    if points is None:
+        return None, Response({"error": "Falta 'points'"}, status=400)
+    try:
+        x = [float(p[0]) for p in points]
+        y = [float(p[1]) for p in points]
+    except Exception:
+        return None, Response({"error": "Formato de 'points' inválido. Debe ser [[x,y],...]"}, status=400)
+    x_eval = data.get('x_eval', None)
+    if x_eval is not None:
+        try:
+            x_eval_f = [float(v) for v in x_eval]
+        except Exception:
+            return None, Response({"error": "Formato de 'x_eval' inválido."}, status=400)
+    else:
+        x_eval_f = None
+    return (x, y, x_eval_f), None
+
+
+@api_view(['POST'])
+def calculate_vandermonde(request):
+    parsed, err = _read_points(request)
+    if err: return err
+    x, y, x_eval = parsed
+    try:
+        res = vandermonde_interpolation(x, y, x_eval)
+        res['method'] = 'vandermonde'
+        return Response(res, status=200)
+    except ValueError as e:
+        return Response({"error": str(e)}, status=400)
+    except Exception as e:
+        return Response({"error": "Error inesperado: " + str(e)}, status=500)
+
+
+@api_view(['POST'])
+def calculate_newton_interpolante(request):
+    parsed, err = _read_points(request)
+    if err: return err
+    x, y, x_eval = parsed
+    try:
+        res = newton_interpolation(x, y, x_eval)
+        res['method'] = 'newton_interpolante'
+        return Response(res, status=200)
+    except ValueError as e:
+        return Response({"error": str(e)}, status=400)
+    except Exception as e:
+        return Response({"error": "Error inesperado: " + str(e)}, status=500)
+
+
+@api_view(['POST'])
+def calculate_lagrange(request):
+    parsed, err = _read_points(request)
+    if err: return err
+    x, y, x_eval = parsed
+    try:
+        res = lagrange_interpolation(x, y, x_eval)
+        res['method'] = 'lagrange'
+        return Response(res, status=200)
+    except ValueError as e:
+        return Response({"error": str(e)}, status=400)
+    except Exception as e:
+        return Response({"error": "Error inesperado: " + str(e)}, status=500)
+
+
+@api_view(['POST'])
+def calculate_spline_lineal(request):
+    parsed, err = _read_points(request)
+    if err: return err
+    x, y, x_eval = parsed
+    try:
+        res = spline_interpolation(x, y, 'lineal', x_eval)
+        res['method'] = 'spline_lineal'
+        return Response(res, status=200)
+    except ValueError as e:
+        return Response({"error": str(e)}, status=400)
+    except Exception as e:
+        return Response({"error": "Error inesperado: " + str(e)}, status=500)
+
+
+@api_view(['POST'])
+def calculate_spline_cubico(request):
+    parsed, err = _read_points(request)
+    if err: return err
+    x, y, x_eval = parsed
+    try:
+        res = spline_interpolation(x, y, 'cubo_natural', x_eval)
+        res['method'] = 'spline_cubico_natural'
+        return Response(res, status=200)
+    except ValueError as e:
+        return Response({"error": str(e)}, status=400)
+    except Exception as e:
+        return Response({"error": "Error inesperado: " + str(e)}, status=500)

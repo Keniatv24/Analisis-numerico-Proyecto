@@ -130,7 +130,7 @@ export default function Capitulo3() {
               />
               <MethodCard
                 title="Splines Lineal y Cúbico"
-                to="/metodos/spline"
+                to="/metodos/splines"
                 desc="Ajustes suaves por tramos: continuidad y derivadas (cúbico) entre nodos."
               />
             </div>

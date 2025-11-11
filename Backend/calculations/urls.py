@@ -2,6 +2,7 @@ from django.urls import path
 from .views import test_calculations, calculate_regla_falsa, calculate_secant, calculate_multiple_roots, calculate_biseccion
 from .views import calculate_fixed_point, calculate_newton, calculate_jacobi, calculate_gaussSeidel, calculate_sor
 from .views import calculate_lu_simple, calculate_lu_pivoteo, calculate_crout, calculate_doolittle, calculate_cholesky
+from .views import calculate_vandermonde, calculate_newton_interpolante, calculate_lagrange, calculate_spline_lineal, calculate_spline_cubico
 
 urlpatterns = [
     path('test/', test_calculations, name='test_calculations'),
@@ -24,4 +25,10 @@ urlpatterns = [
     path('cap4/crout/', calculate_crout, name='calculate_crout_cap4'),
     path('cap4/doolittle/', calculate_doolittle, name='calculate_doolittle_cap4'),
     path('cap4/cholesky/', calculate_cholesky, name='calculate_cholesky_cap4'),
+    # Capítulo 3 - Interpolación
+    path('cap3/vandermonde/', calculate_vandermonde, name='calculate_vandermonde'),
+    path('cap3/newton/', calculate_newton_interpolante, name='calculate_newton_interpolante'),
+    path('cap3/lagrange/', calculate_lagrange, name='calculate_lagrange'),
+    path('cap3/spline_lineal/', calculate_spline_lineal, name='calculate_spline_lineal'),
+    path('cap3/spline_cubico/', calculate_spline_cubico, name='calculate_spline_cubico'),
 ]

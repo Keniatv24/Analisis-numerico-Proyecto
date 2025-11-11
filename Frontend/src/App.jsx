@@ -23,6 +23,12 @@ import Cholesky from "./pages/cap2/Cholesky.jsx";
 import Capitulo2 from "./components/chapters/Capitulo2";
 import Capitulo3 from "./components/chapters/Capitulo3";
 import Capitulo4 from "./components/chapters/Capitulo4";
+// Capítulo 3 métodos
+import VandermondePage from "./components/methods/cap3/vandermonde/Vandermonde";
+import NewtonInterpolantePage from "./components/methods/cap3/newton/NewtonInterpolante";
+import LagrangePage from "./components/methods/cap3/lagrange/Lagrange";
+import SplinesPage from "./components/methods/cap3/splines/Splines";
+import InformeCap3 from "./components/ComparativeInterpolationReportGenerator";
 
 
 function App() {
@@ -33,6 +39,11 @@ function App() {
         <Route path="/capitulo-1" element={<Capitulo1 />} />
         <Route path="/capitulo-2" element={<Capitulo2 />} />
         <Route path="/capitulo-3" element={<Capitulo3 />} />
+  {/* Capítulo 3 rutas específicas */}
+  <Route path="/metodos/vander" element={<VandermondePage />} />
+  <Route path="/metodos/newton-interpolante" element={<NewtonInterpolantePage />} />
+  <Route path="/metodos/lagrange" element={<LagrangePage />} />
+  <Route path="/metodos/splines" element={<SplinesPage />} />
         <Route path="/metodos/biseccion" element={<Biseccion />} />
         <Route path="/metodos/regla-falsa" element={<ReglaFalsa />} />
         <Route path="/metodos/secante" element={<Secante />} />
@@ -42,6 +53,7 @@ function App() {
         <Route path="/graficador" element={<Graficador />} />
         <Route path="/informe" element={<Informe />} />
         <Route path="/informeMatrix" element={<InformeMatrix />} />
+  <Route path="/informeCap3" element={<InformeCap3 />} />
         <Route path="/metodos/cap2/jacobi" element={<Jacobi />} />
         <Route path="/metodos/cap2/gauss-seidel" element={<GaussSeidel />} />
         <Route path="/metodos/cap2/sor" element={<Sor />} />
