@@ -1,5 +1,6 @@
 import { useState } from "react";
 const API_BASE = "/calculations";
+<<<<<<< HEAD
 // Mapa para traducir el endpoint en un nombre bonito de método
 const METHOD_LABELS = {
   cholesky: "Cholesky",
@@ -33,6 +34,8 @@ function saveDirectMethodResult({ endpoint, A, b, out }) {
   localStorage.setItem("cap2DirectMethodsReport", JSON.stringify(updated));
 }
 
+=======
+>>>>>>> 80e3ef221bd142bdd483cbbf67bf4bb617ff3d60
 function Table({ title, data }) {
   if (!data) return null;
   const isVector = Array.isArray(data) && !Array.isArray(data[0]);
@@ -78,6 +81,7 @@ export default function MatrixDirectForm({ endpoint, title, note=null, showP=fal
   const updateB = (i,val)=> {
     const copy = b.slice(); copy[i] = Number(val); setB(copy);
   };
+<<<<<<< HEAD
   
   const submit = async ()=>{
   setLoading(true); setErr(""); setOut(null);
@@ -101,6 +105,22 @@ export default function MatrixDirectForm({ endpoint, title, note=null, showP=fal
   }
   };
 
+=======
+  const submit = async ()=>{
+    setLoading(true); setErr(""); setOut(null);
+    try{
+      const res = await fetch(`${API_BASE}/${endpoint}/`,{
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ matrix: A, vector_b: b })
+      });
+      const data = await res.json();
+      if(!res.ok){ throw new Error(data?.error || data?.conclusion || "Error"); }
+      setOut(data);
+    }catch(e){ setErr(String(e.message||e)); }
+    finally{ setLoading(false); }
+  };
+>>>>>>> 80e3ef221bd142bdd483cbbf67bf4bb617ff3d60
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="mb-4 text-sm text-[var(--ink-soft)]"><a href="/capitulo-2" className="book-link">← Volver</a></div>
