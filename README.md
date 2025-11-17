@@ -2,10 +2,10 @@
 
 ## Autores
 
-Emilton Mena 
-Kenia Margarita Toscano 
-Carlos Arturo Diaz
-Mariana Hincapie 
+- **Emilton Mena** 
+- **Kenia Margarita Toscano** 
+- **Carlos Arturo Diaz**
+- **Mariana Hincapie** 
 
 ## Descripción del Proyecto
 
