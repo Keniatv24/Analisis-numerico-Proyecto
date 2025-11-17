@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ArrowLeft, Info, HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import PointsForm from "../PointsForm";
-import Table, { ResultsCard, Poly } from "../ResultsBlocks";
+import Table, { ResultsCard, Poly, InterpolationChart } from "../ResultsBlocks";
 import { postNewtonInterpolante } from "../../../../api/cap3.js";
 
 export default function NewtonInterpolantePage(){
@@ -10,8 +10,10 @@ export default function NewtonInterpolantePage(){
   const [loading,setLoading] = useState(false);
   const [err,setErr] = useState("");
   const [showInfo,setShowInfo] = useState(false);
+  const [inputPoints, setInputPoints] = useState(null);
   const submit = async ({points, x_eval}) => {
     setLoading(true); setErr(""), setOut(null);
+    setInputPoints(points);
     try{ setOut(await postNewtonInterpolante({ points, x_eval })); }
     catch(e){ setErr(e.message||String(e)); }
     finally{ setLoading(false); }
@@ -39,6 +41,14 @@ export default function NewtonInterpolantePage(){
           <PointsForm onSubmit={submit} isLoading={loading} error={err} methodName="Newton Interpolante" />
           {out ? (
             <ResultsCard title="Resultados Newton">
+              {out.x_eval && out.y_eval && (
+                <InterpolationChart 
+                  points={inputPoints} 
+                  x_eval={out.x_eval} 
+                  y_eval={out.y_eval}
+                  methodName="Newton Interpolante"
+                />
+              )}
               <Poly label="Polinomio en forma de Newton" text={out.polynomial_newton} />
               <Table title="Tabla diferencias divididas" data={out.dd_table} />
               <Table title="Coeficientes a" data={out.a} />

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Download, Calculator, Trophy } from 'lucide-react';
+import { ArrowLeft, Download, Calculator, Trophy, Clock, BarChart3 } from 'lucide-react';
 import PointsForm from './methods/cap3/PointsForm';
 import Table, { ResultsCard, Poly } from './methods/cap3/ResultsBlocks';
 import { postVandermonde, postNewtonInterpolante, postLagrange, postSplineCubico } from '../api/cap3.js';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
 
 const methods = [
   { id: 'vandermonde', name: 'Vandermonde', color: 'bg-[var(--copper-700)]' },
@@ -13,14 +14,22 @@ const methods = [
 ];
 
 const runMethod = async (id, payload) => {
+  const startTime = performance.now();
   try {
-    if (id === 'vandermonde') return await postVandermonde(payload);
-    if (id === 'newton') return await postNewtonInterpolante(payload);
-    if (id === 'lagrange') return await postLagrange(payload);
-    if (id === 'splineCubico') return await postSplineCubico(payload);
-    return null;
+    let result;
+    if (id === 'vandermonde') result = await postVandermonde(payload);
+    else if (id === 'newton') result = await postNewtonInterpolante(payload);
+    else if (id === 'lagrange') result = await postLagrange(payload);
+    else if (id === 'splineCubico') result = await postSplineCubico(payload);
+    else result = null;
+    
+    const endTime = performance.now();
+    const executionTime = endTime - startTime;
+    
+    return { ...result, executionTime };
   } catch (e) {
-    return { error: e?.message || String(e) };
+    const endTime = performance.now();
+    return { error: e?.message || String(e), executionTime: endTime - startTime };
   }
 };
 
@@ -48,7 +57,7 @@ export default function ComparativeInterpolationReportGenerator() {
       const results = await Promise.all(promises);
       const items = methods.map((m, i) => ({ meta: m, data: results[i] }));
 
-      const analysis = buildAnalysis(items, x_eval);
+      const analysis = buildAnalysis(items, x_eval, points);
 
       setReport({ timestamp: new Date().toISOString(), input: { points, x_eval }, items, analysis });
       // Scroll up to show report
@@ -58,9 +67,16 @@ export default function ComparativeInterpolationReportGenerator() {
     }
   };
 
-  const buildAnalysis = (items, x_eval) => {
+  const buildAnalysis = (items, x_eval, points) => {
+    // Calcular tiempos de ejecución
+    const timingData = items.map(it => ({
+      name: it.meta.name,
+      time: it.data?.executionTime || 0,
+      color: it.meta.color
+    }));
+
     // Requiere puntos de evaluación para comparar
-    if (!x_eval || !x_eval.length) return { note: 'Sin puntos de evaluación para comparar salidas.' };
+    if (!x_eval || !x_eval.length) return { note: 'Sin puntos de evaluación para comparar salidas.', timingData };
 
     // y_eval por método
     const methodY = items.reduce((acc, it) => {
@@ -70,7 +86,7 @@ export default function ComparativeInterpolationReportGenerator() {
     }, {});
 
     const methodIds = Object.keys(methodY);
-    if (methodIds.length < 2) return { note: 'Resultados insuficientes para comparación cuantitativa.' };
+    if (methodIds.length < 2) return { note: 'Resultados insuficientes para comparación cuantitativa.', timingData };
 
     // Métrica 1: dispersión máxima por x (igual que antes)
     const perX = x_eval.map((_, idx) => {
@@ -112,7 +128,34 @@ export default function ComparativeInterpolationReportGenerator() {
       return score < scores[best] ? id : best;
     }, null);
 
-    return { maxDiff, avgDiff, scores, bestMethodId };
+    // Calcular errores relativos entre métodos
+    const errorTable = [];
+    if (x_eval && x_eval.length) {
+      for (let i = 0; i < x_eval.length; i++) {
+        const row = { x: x_eval[i] };
+        for (const id of methodIds) {
+          const yi = methodY[id]?.[i];
+          const med = perX[i]?.median;
+          if (typeof yi === 'number' && typeof med === 'number' && med !== 0) {
+            row[id] = Math.abs((yi - med) / med);
+          } else {
+            row[id] = null;
+          }
+        }
+        errorTable.push(row);
+      }
+    }
+
+    // Preparar datos para gráfica
+    const chartData = x_eval ? x_eval.map((x, i) => {
+      const point = { x };
+      for (const id of methodIds) {
+        point[id] = methodY[id]?.[i];
+      }
+      return point;
+    }) : [];
+
+    return { maxDiff, avgDiff, scores, bestMethodId, timingData, errorTable, chartData, methodIds };
   };
 
   const exportTxt = () => {
@@ -242,6 +285,123 @@ export default function ComparativeInterpolationReportGenerator() {
             </div>
           </div>
 
+          {/* Gráfica comparativa de interpolaciones */}
+          {report.analysis?.chartData && report.analysis.chartData.length > 0 && (
+            <div className="rounded-xxl border border-[var(--line)] bg-[var(--card)] p-7 shadow-soft mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <BarChart3 className="h-6 w-6 text-[var(--copper)]" />
+                <h2 className="font-editorial text-2xl">Gráfica Comparativa de Interpolaciones</h2>
+              </div>
+              <div className="bg-white rounded-xl p-4 border border-[var(--line)]">
+                <ResponsiveContainer width="100%" height={400}>
+                  <LineChart data={report.analysis.chartData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis dataKey="x" stroke="#6b7280" label={{ value: 'x', position: 'insideBottom', offset: -5 }} />
+                    <YAxis stroke="#6b7280" label={{ value: 'y', angle: -90, position: 'insideLeft' }} />
+                    <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }} />
+                    <Legend />
+                    {report.analysis.methodIds?.map((id, idx) => {
+                      const method = report.items.find(it => it.meta.id === id);
+                      const colors = ['#92400e', '#365314', '#7c2d12', '#1f2937'];
+                      return (
+                        <Line
+                          key={id}
+                          type="monotone"
+                          dataKey={id}
+                          name={method?.meta.name || id}
+                          stroke={colors[idx % colors.length]}
+                          strokeWidth={2}
+                          dot={{ r: 4 }}
+                        />
+                      );
+                    })}
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
+
+          {/* Tabla de tiempos de ejecución */}
+          {report.analysis?.timingData && (
+            <div className="rounded-xxl border border-[var(--line)] bg-[var(--card)] p-7 shadow-soft mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <Clock className="h-6 w-6 text-[var(--copper)]" />
+                <h2 className="font-editorial text-2xl">Tiempos de Ejecución</h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-white rounded-xl p-4 border border-[var(--line)]">
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={report.analysis.timingData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                      <XAxis dataKey="name" stroke="#6b7280" angle={-15} textAnchor="end" height={80} />
+                      <YAxis stroke="#6b7280" label={{ value: 'ms', angle: -90, position: 'insideLeft' }} />
+                      <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }} />
+                      <Bar dataKey="time" name="Tiempo (ms)">
+                        {report.analysis.timingData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={['#92400e', '#365314', '#7c2d12', '#1f2937'][index % 4]} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="bg-white rounded-xl p-4 border border-[var(--line)]">
+                  <h3 className="font-semibold mb-3">Detalles de Tiempo</h3>
+                  <div className="overflow-auto">
+                    <table className="min-w-full text-sm">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="px-3 py-2 text-left">Método</th>
+                          <th className="px-3 py-2 text-right">Tiempo (ms)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {report.analysis.timingData.map((item, idx) => (
+                          <tr key={idx} className={idx % 2 === 0 ? 'bg-gray-50' : ''}>
+                            <td className="px-3 py-2">{item.name}</td>
+                            <td className="px-3 py-2 text-right font-mono">{item.time.toFixed(2)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Tabla de errores relativos */}
+          {report.analysis?.errorTable && report.analysis.errorTable.length > 0 && (
+            <div className="rounded-xxl border border-[var(--line)] bg-[var(--card)] p-7 shadow-soft mb-6">
+              <h2 className="font-editorial text-2xl mb-4">Errores Relativos por Punto</h2>
+              <p className="text-[var(--ink-soft)] text-sm mb-4">Error relativo de cada método respecto a la mediana de consenso</p>
+              <div className="bg-white rounded-xl p-4 border border-[var(--line)] overflow-x-auto">
+                <table className="min-w-full text-sm">
+                  <thead>
+                    <tr className="bg-[var(--copper-800)] text-white">
+                      <th className="px-3 py-2 text-left">x</th>
+                      {report.analysis.methodIds?.map(id => {
+                        const method = report.items.find(it => it.meta.id === id);
+                        return <th key={id} className="px-3 py-2 text-right">{method?.meta.name || id}</th>;
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {report.analysis.errorTable.map((row, idx) => (
+                      <tr key={idx} className={idx % 2 === 0 ? 'bg-gray-50' : ''}>
+                        <td className="px-3 py-2 font-mono">{row.x}</td>
+                        {report.analysis.methodIds?.map(id => (
+                          <td key={id} className="px-3 py-2 text-right font-mono">
+                            {row[id] !== null && row[id] !== undefined ? row[id].toExponential(4) : 'N/A'}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
           {/* Resultados por método */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {report.items.map((it) => (
@@ -274,6 +434,13 @@ export default function ComparativeInterpolationReportGenerator() {
                 {/* Evaluaciones */}
                 {it.data?.x_eval && it.data?.y_eval && (
                   <Table title="Evaluaciones y(x)" data={it.data.y_eval.map((v, i) => [it.data.x_eval[i], v])} />
+                )}
+
+                {/* Tiempo de ejecución */}
+                {it.data?.executionTime !== undefined && (
+                  <div className="mt-3 p-3 rounded-xl bg-blue-50 border border-blue-200">
+                    <p className="text-sm text-blue-900">⏱️ Tiempo: <strong>{it.data.executionTime.toFixed(2)} ms</strong></p>
+                  </div>
                 )}
 
                 {/* Errores */}

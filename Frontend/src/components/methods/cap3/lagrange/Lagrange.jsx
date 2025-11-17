@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ArrowLeft, Info, HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import PointsForm from "../PointsForm";
-import Table, { ResultsCard, Poly } from "../ResultsBlocks";
+import Table, { ResultsCard, Poly, InterpolationChart } from "../ResultsBlocks";
 import { postLagrange } from "../../../../api/cap3.js";
 
 export default function LagrangePage(){
@@ -10,9 +10,11 @@ export default function LagrangePage(){
   const [loading,setLoading]=useState(false);
   const [err,setErr]=useState("");
   const [showInfo,setShowInfo]=useState(false);
+  const [inputPoints, setInputPoints] = useState(null);
 
   const submit = async ({points,x_eval})=>{
     setLoading(true); setErr(""), setOut(null);
+    setInputPoints(points);
     try{ setOut(await postLagrange({points,x_eval})); }
     catch(e){ setErr(e.message||String(e)); }
     finally{ setLoading(false); }
@@ -48,6 +50,14 @@ export default function LagrangePage(){
           <PointsForm onSubmit={submit} isLoading={loading} error={err} methodName="Lagrange" />
           {out ? (
             <ResultsCard title="Resultados Lagrange">
+              {out.x_eval && out.y_eval && (
+                <InterpolationChart 
+                  points={inputPoints} 
+                  x_eval={out.x_eval} 
+                  y_eval={out.y_eval}
+                  methodName="Lagrange"
+                />
+              )}
               <Poly text={out.polynomial} />
               <Table title="Bases L_i coeficientes" data={out.basis} />
               <Table title="Coeficientes finales" data={out.coefficients} />

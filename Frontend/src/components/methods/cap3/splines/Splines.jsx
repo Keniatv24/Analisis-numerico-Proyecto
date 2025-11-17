@@ -2,12 +2,12 @@ import { useState } from "react";
 import { ArrowLeft, Info, HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import PointsForm from "../PointsForm";
-import Table, { ResultsCard, Poly } from "../ResultsBlocks";
+import Table, { ResultsCard, Poly, InterpolationChart } from "../ResultsBlocks";
 import { postSplineLineal, postSplineCubico } from "../../../../api/cap3.js";
 
 export default function SplinesPage(){
-  const [out,setOut]=useState(null); const [loading,setLoading]=useState(false); const [err,setErr]=useState(""); const [showInfo,setShowInfo]=useState(false); const [mode,setMode]=useState("lineal");
-  const submit = async ({points,x_eval})=>{ setLoading(true); setErr(""), setOut(null); try{ setOut(mode==="lineal"? await postSplineLineal({points,x_eval}) : await postSplineCubico({points,x_eval})); }catch(e){ setErr(e.message||String(e)); } finally{ setLoading(false); }};
+  const [out,setOut]=useState(null); const [loading,setLoading]=useState(false); const [err,setErr]=useState(""); const [showInfo,setShowInfo]=useState(false); const [mode,setMode]=useState("lineal"); const [inputPoints, setInputPoints] = useState(null);
+  const submit = async ({points,x_eval})=>{ setLoading(true); setErr(""), setOut(null); setInputPoints(points); try{ setOut(mode==="lineal"? await postSplineLineal({points,x_eval}) : await postSplineCubico({points,x_eval})); }catch(e){ setErr(e.message||String(e)); } finally{ setLoading(false); }};
   return (
     <div className="min-h-screen bg-[var(--paper)] text-[var(--ink)] font-ui">
       <header className="sticky top-0 z-10 bg-[var(--paper)]/90 backdrop-blur border-b border-[var(--line)]">
@@ -33,6 +33,14 @@ export default function SplinesPage(){
           </div>
           {out ? (
             <ResultsCard title="Resultados Spline">
+              {out.x_eval && out.y_eval && (
+                <InterpolationChart 
+                  points={inputPoints} 
+                  x_eval={out.x_eval} 
+                  y_eval={out.y_eval}
+                  methodName={mode==="lineal"?"Spline Lineal":"Spline Cúbico"}
+                />
+              )}
               {mode==="lineal" && out.segments && (<Table title="Segmentos" data={out.segments.map(s=>[`${s.interval[0]} - ${s.interval[1]}`, s.m, s.b])} />)}
               {mode==="cubico" && out.segments && (<Table title="Segmentos (a,b,c,d)" data={out.segments.map(s=>[`${s.interval[0]} - ${s.interval[1]}`, s.a, s.b, s.c, s.d])} />)}
               {out.x_eval && <Table title="Evaluaciones y(x)" data={out.y_eval.map((v,i)=>[out.x_eval[i], v])} />}

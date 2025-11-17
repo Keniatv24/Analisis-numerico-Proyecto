@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ArrowLeft, Info, HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import PointsForm from "../PointsForm";
-import Table, { ResultsCard, Poly } from "../ResultsBlocks";
+import Table, { ResultsCard, Poly, InterpolationChart } from "../ResultsBlocks";
 import { postVandermonde } from "../../../../api/cap3.js";
 
 export default function VandermondePage(){
@@ -10,9 +10,11 @@ export default function VandermondePage(){
   const [loading,setLoading] = useState(false);
   const [err,setErr] = useState("");
   const [showInfo,setShowInfo] = useState(false);
+  const [inputPoints, setInputPoints] = useState(null);
 
   const submit = async ({points, x_eval}) => {
     setLoading(true); setErr(""), setOut(null);
+    setInputPoints(points);
     try{
       const data = await postVandermonde({ points, x_eval });
       setOut(data);
@@ -62,6 +64,14 @@ export default function VandermondePage(){
           <PointsForm onSubmit={submit} isLoading={loading} error={err} methodName="Vandermonde" />
           {out ? (
             <ResultsCard title="Resultados Vandermonde">
+              {out.x_eval && out.y_eval && (
+                <InterpolationChart 
+                  points={inputPoints} 
+                  x_eval={out.x_eval} 
+                  y_eval={out.y_eval}
+                  methodName="Vandermonde"
+                />
+              )}
               <Poly text={out.polynomial} />
               <Table title="Matriz Vandermonde" data={out.vandermonde} />
               <Table title="Coeficientes (vector)" data={out.solution} />
