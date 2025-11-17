@@ -1,0 +1,15 @@
+#ignore the env
+.env
+.venv
+#ignore the node_modules folder
+node_modules
+#ignore the build folder
+build
+#ignore the coverage folder
+coverage
+#ignore the .env file
+.env.local
+#ignore the env folder in backend
+backend/env/
+#ignore the pycache folder in backend/backend
+__pycache__
