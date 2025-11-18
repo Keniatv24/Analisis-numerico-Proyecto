@@ -39,6 +39,15 @@ Este proyecto implementa una colección completa de métodos numéricos fundamen
 - **Spline Lineal**: Interpolación por tramos lineales
 - **Spline Cúbico**: Interpolación por tramos cúbicos suaves
 
+### Capítulo 4: Métodos de Factorizaciones y algebra matricial 
+
+**Métodos Implementados:**
+- **LU Simple**: Factorización de una matriz A en el producto L·U sin aplicar pivotaje
+- **LU con Pivotaje Parcial**: Versión estable de LU que intercambia filas para evitar pivotes pequeños o nulos
+- **Doolittle**: Método LU donde la matriz L tiene diagonal unitaria (1s) y U contiene los pivotes
+- **Crout**: Método LU donde la matriz U tiene diagonal unitaria (1s) y L contiene los pivotes
+- **Cholesky**: Descomposición especial para matrices simétricas y definidas positivamente: A = L·Lᵀ
+
 ## Requisitos del Sistema
 
 ### Dependencias del Backend (Python/Django)
