@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import methodForm from "./methodForm.jsx";
 import MethodResults from "./methodResults.jsx";
 import api from "../../../../api/config.js";
+import { saveCap4DirectMethodResult } from "../../../../utils/cap4ReportStorage";
 
 const LUPivoteoPage = () => {
   const navigate = useNavigate();
@@ -43,7 +44,9 @@ const LUPivoteoPage = () => {
 
     const newVectorB = Array(newN)
       .fill(0)
-      .map((_, i) => (i < formData.vectorB.length ? formData.vectorB[i] : 0));
+      .map((_, i) =>
+        i < formData.vectorB.length ? formData.vectorB[i] : 0
+      );
 
     setFormData({ n: newN, matrixA: newMatrixA, vectorB: newVectorB });
   };
@@ -72,8 +75,31 @@ const LUPivoteoPage = () => {
         matrix: formData.matrixA,
         vector_b: formData.vectorB,
       };
-      const { data } = await api.post("calculations/cap2/lu_pivoteo/", payload);
-      setResults(data);
+
+      // ⏱️ Medir tiempo de la llamada
+      const t0 = performance.now();
+      const { data } = await api.post(
+        "calculations/cap2/lu_pivoteo/",
+        payload
+      );
+      const t1 = performance.now();
+      const elapsedMs = t1 - t0;
+
+      const extendedData = {
+        ...data,
+        runtimeMs: elapsedMs,
+      };
+
+      setResults(extendedData);
+
+      saveCap4DirectMethodResult({
+        methodKey: "lu_pivoteo",   
+        A: formData.matrixA,
+        b: formData.vectorB,
+        solution: data.solution,
+        conclusion: data.conclusion,
+        runtimeMs: elapsedMs,      
+      });
     } catch (err) {
       setError(
         err?.response?.data?.detail ||
@@ -121,7 +147,7 @@ const LUPivoteoPage = () => {
               </button>
 
               <button
-                onClick={() => navigate("/informeMatrix")}
+                onClick={() => navigate("/informeCap4")}
                 className="book-link inline-flex items-center rounded-xl border border-[var(--line)] px-3 py-1.5 bg-[var(--card)] hover:shadow-soft transition"
               >
                 Ir al Informe
@@ -169,7 +195,15 @@ const LUPivoteoPage = () => {
 
           <div>
             {results ? (
-              <MethodResults results={results} />
+              <div className="h-full flex flex-col">
+                {typeof results.runtimeMs === "number" && (
+                  <div className="mb-3 text-sm text-[var(--ink-soft)]">
+                    Tiempo aproximado de cálculo:{" "}
+                    <strong>{results.runtimeMs.toFixed(2)} ms</strong>
+                  </div>
+                )}
+                <MethodResults results={results} />
+              </div>
             ) : (
               <div className="rounded-xxl border border-[var(--line)] bg-[var(--card)] p-8 flex flex-col items-center justify-center h-full shadow-soft">
                 <div className="h-16 w-16 rounded-full bg-[var(--copper-100)] grid place-items-center mb-4">
@@ -187,7 +221,9 @@ const LUPivoteoPage = () => {
                     <path d="M3 15l4-4 4 4 4-4 4 4" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-editorial mb-1">Sin resultados aún</h3>
+                <h3 className="text-xl font-editorial mb-1">
+                  Sin resultados aún
+                </h3>
                 <p className="text-[var(--ink-soft)] text-center">
                   Ingrese los datos y calcule para ver resultados.
                 </p>
