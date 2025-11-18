@@ -43,13 +43,15 @@ const ComparativeCap4Report = () => {
             hasData: false,
             conclusion: null,
             solution: null,
-            runtimeMs: null,
             firstX: null,
+            runtimeMs: null,
+            n: null,
             converged: false,
             raw: null,
           };
         }
 
+        // Primer valor de x
         let firstX = null;
         if (Array.isArray(entry.solution) && entry.solution.length > 0) {
           const num = Number(entry.solution[0]);
@@ -57,6 +59,16 @@ const ComparativeCap4Report = () => {
             firstX = num.toPrecision(6);
           }
         }
+
+        // Tamaño del sistema
+        const n =
+          entry.A && Array.isArray(entry.A) && entry.A.length
+            ? entry.A.length
+            : null;
+
+        // Tiempo de cálculo (ya lo estás guardando en runtimeMs)
+        const runtimeMs =
+          typeof entry.runtimeMs === "number" ? entry.runtimeMs : null;
 
         const converged =
           !!entry.conclusion &&
@@ -67,9 +79,9 @@ const ComparativeCap4Report = () => {
           hasData: true,
           conclusion: entry.conclusion || "",
           solution: entry.solution || null,
-          runtimeMs:
-            typeof entry.runtimeMs === "number" ? entry.runtimeMs : null,
           firstX,
+          runtimeMs,
+          n,
           converged,
           raw: entry,
         };
@@ -83,7 +95,7 @@ const ComparativeCap4Report = () => {
   }, []);
 
   const executed = results.filter((r) => r.hasData);
-  const withTime = executed.filter((r) => typeof r.runtimeMs === "number");
+  const withTime = executed.filter((r) => r.runtimeMs != null);
 
   const mostEfficient =
     withTime.length > 0
@@ -148,7 +160,7 @@ RESUMEN
 Método más eficiente (tiempo): ${
       mostEfficient ? mostEfficient.name : "No disponible"
     }
-Método destacado por estabilidad/precisión: ${
+Método destacado por estabilidad: ${
       mostAccurate ? mostAccurate.name : "No disponible"
     }
 Promedio de tiempo: ${
@@ -169,7 +181,6 @@ Tasa de convergencia: ${(convergenceRate * 100).toFixed(0)}%
     URL.revokeObjectURL(url);
   };
 
-  // ---- VISTA DEL INFORME ----
   return (
     <div className="min-h-screen bg-[var(--paper)] text-[var(--ink)] font-ui">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -190,7 +201,7 @@ Tasa de convergencia: ${(convergenceRate * 100).toFixed(0)}%
                 </h1>
                 <p className="text-[var(--ink-soft)]">
                   {results.length
-                    ? "Comparación automática de factorizaciones LU / Crout / Doolittle / Cholesky."
+                    ? "Comparación automática de métodos directos (factorizaciones LU, Crout, Doolittle, Cholesky)."
                     : "Ejecuta primero uno o más métodos directos para generar el informe."}
                 </p>
               </div>
@@ -233,7 +244,7 @@ Tasa de convergencia: ${(convergenceRate * 100).toFixed(0)}%
           </div>
         </div>
 
-        {/* Banner Método recomendado */}
+        {/* Banner método recomendado */}
         {mostEfficient && (
           <div className="rounded-xxl border border-[var(--line)] bg-[color-mix(in_olab,var(--paper)_80%,var(--copper)_20%)]/35 shadow-soft p-7 mb-8">
             <div className="flex items-center gap-5">
@@ -278,15 +289,15 @@ Tasa de convergencia: ${(convergenceRate * 100).toFixed(0)}%
               <div className="h-10 w-10 rounded-full bg-[var(--sage)]/30 grid place-items-center">
                 <TrendingUp className="h-6 w-6 text-[var(--copper-900)]" />
               </div>
-              <h3 className="font-editorial text-xl">Más Eficiente</h3>
+              <h3 className="font-editorial text-xl">
+                Promedio de tiempo de cálculo
+              </h3>
             </div>
             <p className="text-2xl font-semibold">
-              {mostEfficient ? mostEfficient.name : "N/A"}
+              {avgRuntime !== null ? `${avgRuntime.toFixed(2)} ms` : "N/A"}
             </p>
             <p className="text-[var(--ink-soft)]">
-              {mostEfficient && mostEfficient.runtimeMs != null
-                ? `${mostEfficient.runtimeMs.toFixed(2)} ms`
-                : "Sin datos de tiempo"}
+              Promedio considerando solo métodos ejecutados.
             </p>
           </div>
         </div>
@@ -323,20 +334,20 @@ Tasa de convergencia: ${(convergenceRate * 100).toFixed(0)}%
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="rounded-lg border border-[var(--line)] bg-[var(--card)] p-3">
                       <p className="text-[var(--ink-soft)] text-sm mb-1">
-                        Primer valor de x
-                      </p>
-                      <p className="font-mono text-lg">
-                        {r.firstX || "No disponible"}
-                      </p>
-                    </div>
-                    <div className="rounded-lg border border-[var(--line)] bg-[var(--card)] p-3">
-                      <p className="text-[var(--ink-soft)] text-sm mb-1">
                         Tiempo de cálculo
                       </p>
                       <p className="font-mono text-lg">
                         {r.runtimeMs != null
                           ? `${r.runtimeMs.toFixed(2)} ms`
                           : "N/A"}
+                      </p>
+                    </div>
+                    <div className="rounded-lg border border-[var(--line)] bg-[var(--card)] p-3">
+                      <p className="text-[var(--ink-soft)] text-sm mb-1">
+                        Primer valor de x
+                      </p>
+                      <p className="font-mono text-lg">
+                        {r.firstX || "No disponible"}
                       </p>
                     </div>
                     <div className="rounded-lg border border-[var(--line)] bg-[var(--card)] p-3">
