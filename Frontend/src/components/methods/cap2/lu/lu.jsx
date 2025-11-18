@@ -91,14 +91,20 @@ const LUPage = () => {
 
       setResults(extendedData);
 
+      // Guardar datos para el informe del capítulo 4
       saveCap4DirectMethodResult({
         methodKey: "lu",
         A: formData.matrixA,
         b: formData.vectorB,
         solution: data.solution,
         conclusion: data.conclusion,
-        runtimeMs: elapsedMs, 
+        runtimeMs: elapsedMs,
       });
+
+      // 👇 YA NO navegamos aquí, solo guardamos.
+      // El usuario irá al informe cuando haga clic en "Ir al Informe".
+      // navigate("/informeCap4", { state: { A: formData.matrixA, b: formData.vectorB } });
+
     } catch (err) {
       setError(
         err?.response?.data?.detail ||
@@ -113,7 +119,7 @@ const LUPage = () => {
 
   return (
     <div className="min-h-screen bg-[var(--paper)] text-[var(--ink)] font-ui">
-      {/* Header editorial (calcado del SOR) */}
+      {/* Header editorial */}
       <header className="sticky top-0 z-10 bg-[var(--paper)]/90 backdrop-blur border-b border-[var(--line)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">

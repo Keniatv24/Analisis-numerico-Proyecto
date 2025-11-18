@@ -82,6 +82,7 @@ function App() {
 
         {/* Capítulo 4: informe comparativo métodos directos */}
         <Route path="/informeCap4" element={<ComparativeCap4Report />} />
+        
       </Routes>
     </div>
   );
